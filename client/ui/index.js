@@ -18,7 +18,7 @@ import {
 } from "../alley.js";
 import { carBringupMode, sortGarage } from "../cars.js";
 import { addClanToEnemies, sortClanPlayersByCoolness } from "../clan.js";
-import { eatSilly, restoreHP } from "../dopings.js";
+import { eatSilly, getStats, restoreHP } from "../dopings.js";
 import startDungeon from "../dungeon-solo.js";
 import { boostClan, joinProt } from "../group-fight.js";
 import { redrawPetarena } from "../pets.js";
@@ -2185,9 +2185,12 @@ export function handleUI() {
     console.log("Group fight");
     LEGACY_initGroupFightLogs();
     handleEndOfGroupFight();
-  } else if (url.includes("/player/")) {
+  } else if (url === "/player/") {
     // player page
     redrawMain();
+    $("#stats-accordion .selected.active")
+      .css("cursor", "pointer")
+      .on("click", getStats);
     // document.querySelector("#assistant-container").scrollIntoView();
   } else if (url === "/automobile/ride/") {
     // rides

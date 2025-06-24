@@ -1,3 +1,6 @@
+/* global player  */
+
+import { sendAlert } from "./ui/index.js";
 import { getElementsOnThePage } from "./utils.js";
 
 export const DOPINGS_DATA_ST = {
@@ -101,4 +104,32 @@ export async function restoreHP() {
 export async function eatSilly() {
   let sillyId = await mapDataStToDataId(DOPINGS_DATA_ST.glupaya);
   await useItem(sillyId);
+}
+
+export async function getStats() {
+  const statNodes = await getElementsOnThePage(
+    ".stats",
+    `/player/${player.id}/`
+  );
+  const statsStrArr = [...statNodes[0].querySelectorAll(".num")].map((el) =>
+    el.getAttribute("title")
+  );
+
+  const stats = Object.fromEntries(
+    statsStrArr.map((line) => {
+      const [key, rest] = line.split("||");
+      const match = rest.match(/Персонаж:\s*(\d+)/);
+      return [key, match ? Number(match[1]) : null];
+    })
+  );
+
+  sendAlert({
+    title: "📊 Ваши статы",
+    text: `<p>${Object.entries(stats)
+      .map(([k, v]) => `${k}: ${v}`)
+      .join("</br>")}</p>`,
+    img: "/css/images/loc/trainer.jpg",
+  });
+
+  return stats;
 }
