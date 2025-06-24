@@ -2091,6 +2091,51 @@ function redrawArbat() {
   actions.append(bringupBtn);
 }
 
+function redrawNeftLenin() {
+  if ($("#neftlenin-switch").length) return;
+  const wrapper = $('<div id="neftlenin-switch"></div>').css({
+    position: "absolute",
+    top: "20px",
+    right: "5px",
+    display: "flex",
+    gap: "2px",
+    alignItems: "center",
+    justifyContent: "center",
+    boxShadow: "rgba(0, 0, 0, 0.25) 0px 0px 8px 4px",
+  });
+
+  const light = createButton({
+    text: "⚪️",
+    title: "Обычный нефтепровод",
+    onClick: () =>
+      $.post(
+        "/neftlenin/",
+        { action: "selectType", type: "usual" },
+        function () {
+          AngryAjax.reload();
+        }
+      ),
+  });
+
+  const dark = createButton({
+    text: "⚫️",
+    title:
+      "Темный нефтепровод\n(❗️вне акции вводит персонажа в тюрьму на 20 минут❗️)",
+    onClick: () =>
+      $.post(
+        "/neftlenin/",
+        { action: "selectType", type: "hard" },
+        function () {
+          AngryAjax.reload();
+        }
+      ),
+  });
+
+  wrapper.append(light, dark);
+
+  $(".welcome").append(wrapper);
+}
+
 function redrawTonusRestore() {
   window.jobShowTonusAlert = function () {
     $.get(
@@ -2150,6 +2195,8 @@ export function handleUI() {
   } else if (url === "/tattoo/") {
     // tattoo
     redrawTattoo();
+  } else if (url === "/neftlenin/") {
+    redrawNeftLenin();
   } else if (url === "/square/tvtower/") {
     // TV tower
     redrawTVTower();

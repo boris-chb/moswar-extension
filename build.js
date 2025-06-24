@@ -29,7 +29,7 @@ esbuild
 (async function () {\n`,
     },
     footer: {
-      js: `\nutils_.init();\n})();`,
+      js: `\nwindow.utils_ = utils_;\nutils_.init();\n})();`,
     },
   })
   .catch(() => process.exit(1));
