@@ -1,0 +1,481 @@
+/* global $ showAlert */
+
+import { formatNumber } from "../utils";
+import { createButton, createDropdown } from "./button.js";
+
+export function enhanceLogs() {
+  const currentPlayerName = getCurrentPlayerName();
+  const $logsContainer = $(".log > ul.fight-log .text");
+
+  let $myLogsContainer = $("#logs-me");
+
+  if (!$myLogsContainer.length) {
+    $myLogsContainer = $("<div id='logs-me'></div>")
+      .css("display", "flex")
+      .css("flexDirection", "column");
+  }
+
+  // Run the function on both left and right lists
+  $(".list-users--left, .list-users--right").each(function () {
+    sortPlayersLists($(this));
+  });
+
+  // sort logs
+  const logActions = [
+    { text: "Воронка", icon: "/@/images/obj/../ico/ability/tugboat.png" },
+    {
+      text: "пускает на котошаверму сердитого котика",
+      icon: "/@/images/obj/../ico/ability/burrito_abil.png",
+    },
+    { text: "Дымовую завесу", icon: "/@/images/ico/ability/kuzn_abil.png" },
+    { text: "Компьютерный Вирус", icon: "/@/images/loc/hacker/abil_1.png" },
+    // { text: "привез на бронепоезде", action: formatTrainAttackLog },
+    // { text: "Незримый защитник", action: formatDefenderLogs },
+    {
+      text: "Брат Михалыча",
+      condition: (el) => el.hasClass("rupor"),
+      action: (el) => el.remove(),
+    },
+    { text: "никто не пострадал", action: (el) => el.remove() },
+    { text: "батарейки Теслы", icon: "/@/images/ico/ability/tesla_expl.png" },
+    {
+      text: "с помощью реликта снижает крутость",
+      icon: "/@/images/obj/relict/rock77_128.png",
+    },
+    { text: "поджигает трон", icon: "/@/images/obj/relict/rock38_128.png" },
+    {
+      text: "Реликт делают великим",
+      icon: "/@/images/obj/relict/rock47_128.png",
+    },
+    { text: "увозит у игрока", icon: "/@/images/obj/cars/129-big.png" },
+    {
+      text: "командует ОМОНу разгонять несогласных",
+      icon: "/@/images/obj/confr_ability/fight_ability6.png",
+    },
+    { text: "превращает в куклу", icon: "/@/images/loc/squid2025/abils/6.png" },
+    {
+      text: "призывает Боевого мигранта, размахивая Трудовой книжкой",
+      icon: "/@/images/obj/fight_item/migrant.png",
+    },
+    {
+      text: "ест китайски печеньки и восстанавливает себе",
+      icon: "/@/images/loc/squid2025/abils/5.png",
+    },
+    { text: "играет в Камешки", icon: "/@/images/loc/squid2025/abils/2.png" },
+    { text: "дёргает за струны!", icon: "/@/images/ico/ability/balalajka.png" },
+    { text: "делает кусь питомцу", icon: "/@/images/ico/ability/wolfie_2.png" },
+    {
+      text: "яростно призывает в бой клона",
+      icon: "/@/images/ico/ability/fury_7.png",
+    },
+    {
+      text: "Пришелец призывает на помощь мини-Пришельца!",
+      icon: "/@/images/ico/ability/alien_many.png",
+    },
+    {
+      text: "объединяет трех мини-пришельцев",
+      icon: "/@/images/ico/ability/alien_uber.png",
+    },
+    {
+      text: "привозит в бой на своем Майбабахе",
+      icon: "/@/images/obj/gifts2017/mers/invite-big.png",
+    },
+    {
+      text: "проводит удар с беспилотника!",
+      icon: "/@/images/ico/ability/bpla_abil.png",
+    },
+    {
+      text: "Космическая Пыль приходит на помощь",
+      icon: "/@/images/ico/ability/cloud3.png",
+    },
+    { text: "стреляет как в кино", icon: "/@/images/ico/ability/gru_1.png" },
+    { text: "бьет с помощью лапищи", icon: "/@/images/ico/ability/lion_1.png" },
+    {
+      text: "предъявить документы",
+      icon: "/@/images/ico/ability/tetris_abil.png",
+    },
+    {
+      text: "используя Джейл Брейк, снимает",
+      icon: "/@/images/loc/hacker/abil_2.png",
+    },
+    {
+      text: "Катушку Теслу",
+      icon: "/@/images/obj/gifts2018/car/tesla_coil_128.png",
+    },
+    { text: "Хакер [??] чипирует", icon: "/@/images/ico/ability/bigbro_2.png" },
+    {
+      text: "Хакер мобилизуется и приходит на помощь",
+      icon: "/@/images/loc/hacker/abil_6.png",
+    },
+    { text: "становится Боссом", icon: "/@/images/loc/squid2025/abils/3.png" },
+    {
+      text: "громко читает QR-код",
+      icon: "/@/images/ico/ability/bigbro_3.png",
+    },
+    {
+      text: "призывает сильнейших духов соперников",
+      icon: "/@/images/ico/ability/abil_shaman_ultra.png",
+    },
+    { text: "Мэр", icon: "/@/images/ico/ability/major.png" },
+    { text: "МосГосСтрах!", icon: "/@/images/obj/relict/rock72_128.png" },
+    { text: "Пылающий след", icon: "/@/images/ico/ability/car220.png" },
+    {
+      text: "использует дубиночку и наносит 50% урона",
+      icon: "/@/images/ico/ability/omon_weapon.png",
+    },
+    {
+      text: "призывает Штурмовика, размахивая удостоверением",
+      icon: "/@/images/obj/fight_item/migrant4_128.png",
+    },
+    {
+      text: "высаживает в бой Десант",
+      icon: "/@/images/ico/ability/heli_cage.png",
+    },
+    {
+      text: "возвращается и сбрасывает Балласт",
+      icon: "/@/images/ico/ability/afg.png",
+    },
+    {
+      text: "пролетает на джете и увеличивает свою максимальную ярость",
+      icon: "/@/images/obj/cars/361-big.png",
+    },
+    {
+      text: "прогоняет всех вторых питомцев",
+      icon: "/@/images/obj/../ico/ability/burrito_abil.png",
+    },
+    {
+      text: "Пришелец заражает паразитом",
+      icon: "/@/images/ico/ability/alien_par.png",
+    },
+    {
+      text: "Марсианин",
+      icon: "/@/images/loc/mars/abils/abil5.png",
+    },
+    {
+      text: "ракету DIY",
+      icon: "/@/images/loc/rocket/rocket.png",
+    },
+    {
+      text: "горячую картошку",
+      icon: "/@/images/loc/mars/potato@2x.png",
+    },
+    {
+      text: "гипнотизирует",
+      icon: "/@/images/ico/ability/abys_abil.png",
+    },
+    {
+      text: "Титанос делает великим",
+      icon: "/@/images/loc/tanos/talant_3.png",
+    },
+    {
+      text: "рой пчёл",
+      icon: "/@/images/obj/bear_ability/bear_ability_1.png",
+    },
+    {
+      text: "рой пчёл",
+      icon: "/@/images/obj/bear_ability/bear_ability_1.png",
+    },
+    {
+      text: "БПЛА",
+      icon: "/@/images/obj/cars/338-big.png",
+    },
+    {
+      text: "прячется под крылом самолёта и его здоровье не падает ниже",
+      icon: "/@/images/obj/cars/319-big.png",
+    },
+    {
+      text: "кубрик-рубика",
+      icon: "/@/images/obj/gifts2025/ny/rubik/8_256.png",
+    },
+  ];
+
+  function looselyIncludes(html, text) {
+    if (!text) console.log(html);
+    return text.split(/\s+/).every((word) => html.includes(word));
+  }
+
+  const dropdownContainer = $("<div>").css({
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+  });
+  const dropdownMap = new Map();
+
+  $logsContainer.children().each(function () {
+    const el = $(this);
+    const logText = el.text();
+
+    for (const { text, icon, action, condition } of logActions) {
+      if (looselyIncludes(logText, text) && (!condition || condition(el))) {
+        if (text.includes(""))
+          if (!dropdownMap.has(text)) {
+            dropdownMap.set(
+              text,
+              createDropdown({
+                toggleText: `<img src="${icon}" style="height:64px; width: 64px;" class="ability-log-icon" />`,
+                items: [],
+                className: "ability-log-container",
+                isOpen: false,
+              })
+            );
+          }
+
+        if (icon) addIcon(el, icon);
+        if (action) action(el);
+
+        dropdownMap.get(text).append(el);
+      }
+    }
+
+    if (
+      currentPlayerName &&
+      logText.includes(currentPlayerName) &&
+      !logText.toLowerCase().includes("клон")
+    ) {
+      $myLogsContainer.append(el);
+    }
+  });
+
+  // Append all dropdowns at the end
+  dropdownMap.forEach((dropdown) => dropdownContainer.append(dropdown));
+  $logsContainer.append(dropdownContainer);
+
+  const $myLogsDropdown = createDropdown({
+    toggleText: "Мои логи",
+    className: "me-logs",
+    items: [$myLogsContainer],
+    isOpen: true,
+  }).css({
+    outline: "4px inset lightseagreen",
+    borderRadius: "2px",
+    padding: "6px 0px",
+  });
+
+  if (!$(".me-logs").length && $myLogsContainer.length > 0) {
+    $logsContainer.prepend($myLogsDropdown);
+  }
+}
+
+function sortPlayersLists($container) {
+  var $rageContainer = $("<div>")
+    .css("display", "flex")
+    .css("flexDirection", "column");
+
+  var $me,
+    $dead = [],
+    $players = [],
+    $brothersMikhalycha = [];
+
+  $container.find("li").each(function () {
+    var $li = $(this);
+    var $playerRage = $li.find(".player-rage");
+
+    if ($playerRage.length) {
+      var rageWidth = parseFloat($playerRage.find(".percent").css("width"));
+
+      // Identify the current player and add them to the correct array
+      if ($li.hasClass("me")) {
+        $me = $li;
+      } else if ($li.hasClass("dead")) {
+        $dead.push($li);
+      } else if ($li.find(".user").text().includes("Брат Михалыча")) {
+        // Check for "Брат Михалыча" and add to $brothersMikhalycha
+        $brothersMikhalycha.push({ li: $li, rage: rageWidth });
+      } else {
+        // Sort the rest by the rage width (descending)
+        $players.push({ li: $li, rage: rageWidth });
+      }
+    }
+  });
+
+  // Sort players based on rage width (descending)
+  $players.sort(function (a, b) {
+    return b.rage - a.rage; // Descending order
+  });
+
+  // Sort "Брат Михалыча" players based on their rage width (descending)
+  $brothersMikhalycha.sort(function (a, b) {
+    return b.rage - a.rage; // Descending order
+  });
+
+  // Prepend the current player, append sorted players, then Брат Михалыча, and finally dead players
+  if ($me) $rageContainer.prepend($me);
+
+  // Append sorted players
+  $players.forEach(function (player) {
+    $rageContainer.append(player.li);
+  });
+
+  // Append "Брат Михалыча" players
+  $brothersMikhalycha.forEach(function (player) {
+    $rageContainer.append(player.li);
+  });
+
+  // Append dead players
+  $dead.forEach(function ($li) {
+    $rageContainer.append($li);
+  });
+
+  // Prepend the container with sorted players to the list
+  $container.prepend($rageContainer);
+}
+
+function formatTrainAttackLog($p) {
+  const match = $p.html().match(/(.*?)пострадали:\s*(.*)/);
+  if (!match) return;
+
+  const mainText = match[1].trim();
+  const players = match[2].split(/,\s*/).map((player) => player.trim());
+
+  $p.empty().css({
+    display: "flex",
+    flexDirection: "column",
+  });
+
+  // Top div with icon
+  const $topDiv = $("<div>").css({
+    display: "flex",
+    alignItems: "center",
+  });
+
+  const $img = $("<img>")
+    .attr("src", "/@/images/ico/ability/kim_sum2.png")
+    .css({
+      width: "32px",
+      height: "32px",
+    });
+
+  const $textSpan = $("<span>").html(mainText);
+
+  $topDiv.append($img).append($textSpan);
+
+  // Grid for players
+  const $gridDiv = $("<div>").css({
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
+    gap: "4px",
+  });
+
+  players.forEach((player) => {
+    const playerWithConvertedNumber = player.replace(/-?\d+/g, (match) =>
+      formatNumber(Number(match))
+    );
+    $gridDiv.append(playerWithConvertedNumber);
+  });
+
+  $p.append($topDiv).append($gridDiv);
+}
+
+function formatDefenderLogs() {
+  $(".text").each(function () {
+    var $container = $(this);
+    var $pContainer = $("<p>", { class: "defender-log" });
+    var $nodes = $container.contents();
+    var parts = [];
+
+    for (var i = 0; i < $nodes.length; i++) {
+      var node = $nodes[i];
+      if (node.nodeType === 1 && node.tagName === "P") break; // Stop at the first <p>
+      $pContainer.append(node);
+    }
+
+    if ($pContainer.contents().length) {
+      let rawText = $pContainer
+        .html()
+        .split(".")
+        .filter((p) => p.trim() !== "");
+      if (rawText.length > 0) {
+        let firstSentence = rawText[0].replace(" жизней", "");
+        let otherSentences = rawText.slice(1).map((p) =>
+          p
+            .replace(/.*?бьет /, "")
+            .replace(" жизней", "")
+            .trim()
+        );
+        $pContainer.html(`${firstSentence}, ${otherSentences.join(", ")}.`);
+        addIcon($pContainer, "/@/images/obj/relict/rock17_128.png");
+      }
+      $container.prepend($pContainer);
+    }
+  });
+}
+
+function addIcon($p, src) {
+  $p.css({
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
+  });
+
+  const $img = $("<img>").attr("src", src).css({
+    width: "32px",
+    height: "32px",
+  });
+
+  const $span = $("<span>").html($p.html());
+
+  $p.empty().append($img).append($span);
+}
+
+function getCurrentPlayerName() {
+  return $(".me .user a[href*='player']")?.text();
+}
+
+export function extractFightLogEntries() {
+  const selector =
+    "#fightGroupForm > table > tbody > tr > td.log > ul > li > div > p";
+  const elements = document.querySelectorAll(
+    `${selector} span.name-resident, ${selector} span.name-arrived`
+  );
+
+  return [
+    ...new Set(Array.from(elements).map((el) => el.closest("p").outerHTML)),
+  ];
+}
+
+export function replaceGroupFightLogs(logs) {
+  if (!logs) {
+    logs = extractFightLogEntries();
+  }
+
+  // count before
+  const logsCountBefore = $(
+    "#sign_ufl > tbody > tr > td.log > ul > li > div.text"
+  )
+    .children()
+    .filter(function () {
+      // Keep elements that have a 'class' attribute, even if it's empty
+      return $(this).is("[class]");
+    })
+    .not(".line").length;
+
+  // replace logs
+  $("#sign_ufl > tbody > tr > td.log > ul > li > div.text").html(
+    [...logs].join("")
+  );
+
+  // count after
+  const logsCountAfter = $(
+    "#sign_ufl > tbody > tr > td.log > ul > li > div.text"
+  ).children().length;
+
+  // alert
+  var alert = showAlert(
+    "✅ Очитска логов от НПС",
+    `Кол-во логов до очистки: <strong>${logsCountBefore}</strong> <br>Кол-во логов после очистки: <strong>${logsCountAfter}</strong><br>Логов убрано: <strong>${logsCountBefore - logsCountAfter}</strong>`
+  );
+
+  var fightGroup = $(".fight-group");
+  if (fightGroup.length) {
+    var position = fightGroup.offset();
+    var top = position.top;
+    var left = position.left + fightGroup.outerWidth();
+    var positionOffset = 100;
+
+    // Place the alert at the top-right corner
+    alert.css({
+      top: top + "px",
+      left: positionOffset + left + "px",
+    });
+  }
+}

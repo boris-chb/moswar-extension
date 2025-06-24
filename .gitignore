@@ -1,0 +1,6 @@
+node_modules/
+.DS_Store
+squid-game/*.csv
+squid-game/results
+rog/gift-data
+smurf.js

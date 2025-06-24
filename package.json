@@ -1,0 +1,47 @@
+{
+  "name": "moswar-bot",
+  "version": "1.0.0",
+  "description": "Moswar Bot App",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "build": "bun build.js",
+    "start": "bun run build && daddy=true bun main.js",
+    "smurf": "bun build.js && bun smurf.js",
+    "autopilot": "bun run build && bun autopilot.js",
+    "smurf1": "bun run build && email=boris.ciobirca@gmail.com password=Uvp3G\\!__ bun main.js",
+    "smurf2": "bun run build && email=cjb2518@gmail.com password=123123 bun main.js",
+    "smurf3": "bun run build && email=korodimos.d@gmail.com password=123123 bun main.js",
+    "smurf4": "bun run build && email=helege1502@merotx.com password=123123 bun main.js",
+    "smurf5": "bun run build && email=npramdmievcdrholen@poplk.com password=123123 bun main.js",
+    "smurf6": "bun run build && email=ditafo5219@gitated.com password=123123 bun main.js",
+    "protector": "bun run build && email=boris.chobyrka@gmail.com password=43722664 bun main.js",
+    "moon": "bun run build && email=mosvarovitch@yandex.ru password=p0shelna bun main.js"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.26.5",
+    "@eslint/js": "^9.18.0",
+    "electron": "^33.3.1",
+    "esbuild": "^0.24.2",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.6.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "babel-eslint": "^10.1.0",
+    "cheerio": "^1.0.0",
+    "csv-parser": "^3.1.0",
+    "eslint": "^8.57.1",
+    "moment": "^2.30.1",
+    "node-cron": "^3.0.3",
+    "node-telegram-bot-api": "^0.66.0",
+    "p-limit": "^6.2.0",
+    "prettier": "^3.4.2",
+    "puppeteer": "^23.11.1",
+    "redis": "^4.7.0"
+  }
+}

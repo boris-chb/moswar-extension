@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: moswar-bot
+    env: node
+    buildCommand: |
+      curl -fsSL https://bun.sh/install | bash
+      export PATH=$HOME/.bun/bin:$PATH
+      bun install
+    startCommand: "bun run autopilot"
+    plan: free
+    envVars:
+      - key: PUPPETEER_SKIP_DOWNLOAD
+        value: "true"
