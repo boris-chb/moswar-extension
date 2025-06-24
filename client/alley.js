@@ -829,9 +829,11 @@ export async function farm(count = 25) {
   for (let i = 0; i < count; i++) {
     // resetAlleyCooldown();
     await eatSnickers();
+    const level = +player.level === 24 ? +player.level : +player.level - 2;
+
     await attackByCriteria({
-      minLvl: +player.level - 2,
-      maxLvl: +player.level - 2,
+      minLvl: level,
+      maxLvl: level,
       criteria: "level",
       performChecks: false,
       werewolf: true,

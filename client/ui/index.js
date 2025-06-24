@@ -300,11 +300,11 @@ export async function renderNavbar() {
     alignItems: "center",
     padding: "6px 12px",
     zIndex: "102",
-    border: "4px solid #ffd591;",
+    border: "4px solid #ffd591",
     background: "#f9f6ec",
     borderRadius: "8px",
     margin: "14px",
-    boxShadow: "rgba(0, 0, 0, 0.1) 0px 0px 10px 5px",
+    boxShadow: "rgba(0, 0, 0, 0.25) 0px 0px 8px 4px",
   });
 
   // const cosmodromeBtn = await getElementsOnThePage(
