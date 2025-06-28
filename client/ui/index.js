@@ -298,9 +298,9 @@ export async function renderNavbar() {
     flexWrap: "wrap",
     gap: "16px 32px",
     alignItems: "center",
-    padding: "6px 12px",
+    padding: "10px 12px",
     zIndex: "102",
-    border: "4px solid #ffd591",
+    border: "2px solid #ffd591",
     background: "#f9f6ec",
     borderRadius: "8px",
     margin: "14px",
@@ -1992,6 +1992,75 @@ function handleEndOfGroupFight() {
   }
 }
 
+function redrawGroupFightLogs() {
+  const logsWrapper = $log.find("div.text");
+  const keywords = [
+    {
+      text: "внезапно оживает при помощи таинственной чёрной кошки, возникшей из Матрицы",
+      img: "/@/images/obj/beast_ability/ability40.png",
+    },
+    {
+      text: "с помощью реанемобиля возвращается в бой",
+      img: "/@/images/obj/cars/162-big.png",
+    },
+    {
+      text: "громко читает QR-код",
+      img: "/@/images/ico/ability/bigbro_3.png",
+    },
+  ];
+
+  const $matching = $log
+    .find("div.text p")
+    .filter((_, p) => keywords.some(({ text }) => $(p).text().includes(text)));
+
+  $matching.each((_, p) => {
+    const $p = $(p);
+    const entry = keywords.find(({ text }) => $p.text().includes(text));
+    if (!entry) return;
+
+    const $wrapper = $("<div>").css({
+      display: "flex",
+      alignItems: "center",
+      gap: "4px",
+      border: "1px solid rgb(103, 63, 0)",
+      borderRadius: "4px",
+      padding: "4px",
+    });
+    const $img = $("<img>")
+      .attr("src", entry.img)
+      .css({ width: "32px", height: "32px" });
+
+    $wrapper.append($img, $p.clone());
+    $wrapper.prependTo(logsWrapper);
+    $p.remove();
+    $(".forcejoin").each((_, el) => {
+      $(el).prependTo(logsWrapper);
+    });
+  });
+}
+
+function handleGroupFightUI() {
+  // chat fixed position
+  const miniChat = $("#miniChat");
+  if (miniChat.length > 0) {
+    miniChat.css({
+      left: "3px",
+      top: "570px",
+      width: "208.778px",
+      height: "577.778px",
+      position: "absolute",
+    });
+
+    const $content = miniChat.find(".content");
+    if ($content) {
+      $content.scrollTop($content[0]?.scrollHeight);
+    }
+  }
+
+  // redraw group fight logs
+  redrawGroupFightLogs();
+}
+
 function isGroupFight() {
   const url = location.pathname;
   if (url.match(/^(?!.*\/alley\/).*\/fight\//)) {
@@ -2185,6 +2254,7 @@ export function handleUI() {
     console.log("Group fight");
     LEGACY_initGroupFightLogs();
     handleEndOfGroupFight();
+    handleGroupFightUI();
   } else if (url === "/player/") {
     // player page
     redrawMain();
@@ -2287,13 +2357,19 @@ export function handleUI() {
     coolnessSpan.on("click", sortClanPlayersByCoolness);
 
     const addToEnemiesBtn = createButton({
-      text: "В список врагов",
+      text: "+Враги",
+      title: "Добавить в список врагов (для кланвара)",
       onClick: () => addClanToEnemies(),
       className: "add-to-enemies",
       disableAfterClick: true,
     });
 
-    $('td.label:contains("Кланеры")').prepend(addToEnemiesBtn);
+    $(addToEnemiesBtn).css({
+      display: "block",
+      marginLeft: "auto",
+    });
+
+    $('td.label:contains("Кланеры")').append(addToEnemiesBtn);
     coolnessSpan.insertAfter("a[onclick=\"$('#players').toggle();\"]");
   } else if (["/squid/", "/meetings/", "/sovet/career/"].includes(url)) {
     $("#content")[0].scrollIntoView({ behavior: "smooth", block: "start" });

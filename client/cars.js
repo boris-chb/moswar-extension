@@ -390,7 +390,7 @@ export function sortGarage() {
     transform: "translateX(-50%)",
     width: "80vw",
     margin: "auto",
-    "z-index": 9998,
+    "z-index": 101,
   });
 
   $(".cars-trip-accordion").css({

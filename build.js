@@ -22,8 +22,8 @@ esbuild
 // @include        https://*.moswar.mail.ru*
 // @match          https://www.moswar.ru/*
 // @match          https://*.moswar.net/*
-// @updateURL      https://raw.githubusercontent.com/boris-chb/moswar-bot/refs/heads/main/dist/bundle.js
-// @downloadURL    https://raw.githubusercontent.com/boris-chb/moswar-bot/refs/heads/main/dist/bundle.js
+// @updateURL      https://raw.githubusercontent.com/boris-chb/moswar-extension/refs/heads/main/dist/bundle.js
+// @downloadURL    https://raw.githubusercontent.com/boris-chb/moswar-extension/refs/heads/main/dist/bundle.js
 // @grant          none
 // ==/UserScript==
 (async function () {\n`,

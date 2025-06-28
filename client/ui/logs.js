@@ -187,6 +187,10 @@ export function enhanceLogs() {
       text: "кубрик-рубика",
       icon: "/@/images/obj/gifts2025/ny/rubik/8_256.png",
     },
+    {
+      text: "с помощью реанемобиля возвращается в бой",
+      icon: "/@/images/obj/cars/162-big.png",
+    },
   ];
 
   function looselyIncludes(html, text) {
