@@ -1,9 +1,5 @@
 /* global Dungeon, AngryAjax */
 
-async function delay(s = 1) {
-  return new Promise((res) => setTimeout(res, s * 1000));
-}
-
 const groupPath = {
   toFirstBoss: [
     4,

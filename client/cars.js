@@ -9,11 +9,11 @@ export const EXCEPTION_CARS = [
   220, 196, 133, 87, 222, 179, 161,
 ];
 
-export const EXCEPTION_PLANES_AND_BOATS_RIDES_IDS = [158, 219, 155]; // zeppelin, kosmospas (mars-25), kosmospas
+export const EXCEPTION_PLANES_AND_BOATS_RIDES_IDS = [158, 219, 155, 121]; // zeppelin, kosmospas (mars-25), kosmospas, mi-8 (десант)
 
 // вв
 export const PLANES_AND_BOATS_RIDES_IDS = [
-  192, 158, 190, 223, 121, 93, 97, 135, 155, 182, 178, 195, 219, 59, 216, 212,
+  192, 158, 219, 155, 121, 190, 223, 93, 97, 135, 182, 178, 195, 59, 216, 212,
   183, 173, 159, 156, 149, 146, 134, 119, 111, 95, 88, 84, 78, 74, 69, 68, 65,
   58, 55, 54, 52, 51, 49, 44, 38, 36, 35,
 ];

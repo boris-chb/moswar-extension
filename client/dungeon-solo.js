@@ -229,6 +229,14 @@ _dung.xod = function () {
         return;
       }
       if (data && data.return_url && data.return_url.search("/fight/") != -1) {
+        groupFightMakeStep();
+        groupFightMakeStep();
+        groupFightMakeStep();
+        groupFightMakeStep();
+        groupFightMakeStep();
+        groupFightMakeStep();
+        groupFightMakeStep();
+
         console.log("Групповой бой ");
         setTimeout(_dung.xod, 5000);
         return;

@@ -191,11 +191,6 @@ function isInGroupFight() {
   return normalFightRegex.test(currentUrl);
 }
 
-export async function smackMyBitchUp() {
-  await attackPlayer(7362678);
-  await attackPlayer(7241223);
-}
-
 export async function handleSmurfFight() {
   try {
     let cooldownSeconds = await getAlleyCooldown();

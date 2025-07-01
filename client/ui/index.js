@@ -26,7 +26,7 @@ import { handlePvpFight, initPvpUI } from "../pvp.js";
 import { handleModifyManyTattoos } from "../tattoo.js";
 import { formatNumber, getElementsOnThePage, strToHtml } from "../utils.js";
 import { createButton, createNumberAction } from "./button.js";
-import { enhanceLogs } from "./logs.js";
+import { enhanceLogs, redrawGroupFightLogs } from "./logs.js";
 import { createPopover } from "./popover.js";
 
 const assistantButtonsProps = [
@@ -1990,53 +1990,6 @@ function handleEndOfGroupFight() {
     restoreHP();
     AngryAjax.goToUrl(redirectUrl);
   }
-}
-
-function redrawGroupFightLogs() {
-  const logsWrapper = $log.find("div.text");
-  const keywords = [
-    {
-      text: "внезапно оживает при помощи таинственной чёрной кошки, возникшей из Матрицы",
-      img: "/@/images/obj/beast_ability/ability40.png",
-    },
-    {
-      text: "с помощью реанемобиля возвращается в бой",
-      img: "/@/images/obj/cars/162-big.png",
-    },
-    {
-      text: "громко читает QR-код",
-      img: "/@/images/ico/ability/bigbro_3.png",
-    },
-  ];
-
-  const $matching = $log
-    .find("div.text p")
-    .filter((_, p) => keywords.some(({ text }) => $(p).text().includes(text)));
-
-  $matching.each((_, p) => {
-    const $p = $(p);
-    const entry = keywords.find(({ text }) => $p.text().includes(text));
-    if (!entry) return;
-
-    const $wrapper = $("<div>").css({
-      display: "flex",
-      alignItems: "center",
-      gap: "4px",
-      border: "1px solid rgb(103, 63, 0)",
-      borderRadius: "4px",
-      padding: "4px",
-    });
-    const $img = $("<img>")
-      .attr("src", entry.img)
-      .css({ width: "32px", height: "32px" });
-
-    $wrapper.append($img, $p.clone());
-    $wrapper.prependTo(logsWrapper);
-    $p.remove();
-    $(".forcejoin").each((_, el) => {
-      $(el).prependTo(logsWrapper);
-    });
-  });
 }
 
 function handleGroupFightUI() {

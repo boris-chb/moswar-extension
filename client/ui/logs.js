@@ -1,7 +1,122 @@
-/* global $ showAlert */
+/* global $ $log showAlert */
 
 import { formatNumber } from "../utils";
 import { createButton, createDropdown } from "./button.js";
+
+const primaryKeywords = [
+  {
+    text: "внезапно оживает при помощи таинственной чёрной кошки, возникшей из Матрицы",
+    img: "/@/images/obj/beast_ability/ability40.png",
+  },
+  {
+    text: "с помощью реанемобиля возвращается в бой",
+    img: "/@/images/obj/cars/162-big.png",
+  },
+  {
+    text: "громко читает QR-код",
+    img: "/@/images/ico/ability/bigbro_3.png",
+  },
+  {
+    text: "надевает тюрбан",
+    img: "/@/images/ico/ability/bentley_abil.png",
+  },
+  {
+    text: "негативные эффекты",
+    img: "/@/images/ico/ability/abil_dyson.png",
+  },
+
+  {
+    text: "видит красный свет и застывает",
+    img: "/@/images/loc/squid2025/abils/6.png",
+  },
+  {
+    text: "в куклу и тот начинает застывать каждые 2 хода",
+    img: "/@/images/loc/squid2025/abils/6.png",
+  },
+];
+
+const secondaryKeywords = [
+  {
+    text: "пускает на котошаверму сердитого котика",
+    img: "/@/images/obj/../ico/ability/burrito_abil.png",
+  },
+  {
+    text: "делает кусь питомцу",
+    img: "/@/images/obj/../ico/ability/wolfie_2.png",
+  },
+  {
+    text: "бьет хвостом и игрок",
+    img: "/@/images/ico/ability/dino5.png",
+  },
+  {
+    text: "привез на бронепоезде могучего союзника",
+    img: "/@/images/ico/ability/kim_sum2.png",
+  },
+];
+
+export function redrawGroupFightLogs() {
+  if ($("#enhanced-logs").length) return;
+
+  const $allLogs = $log.find("div.text");
+  const $container = $("<div id='enhanced-logs'>").css({
+    display: "flex",
+    flexDirection: "column",
+    gap: "4px",
+    marginBottom: "8px",
+  });
+
+  const allKeywords = [
+    ...secondaryKeywords.map((k) => ({ ...k, priority: 0 })),
+    ...primaryKeywords.map((k) => ({ ...k, priority: 1 })),
+  ];
+
+  const $matching = $log
+    .find("div.text p")
+    .filter((_, p) =>
+      allKeywords.some(({ text }) => $(p).text().includes(text))
+    );
+
+  const entries = [];
+
+  $matching.each((_, p) => {
+    const $p = $(p);
+    const entry = allKeywords.find(({ text }) => $p.text().includes(text));
+    if (!entry) return;
+
+    const $logWrapper = $("<div>").css({
+      display: "flex",
+      alignItems: "center",
+      gap: "4px",
+      border: "1px solid rgb(103, 63, 0)",
+      borderRadius: "4px",
+      padding: "4px",
+    });
+
+    const $img = $("<img>")
+      .attr("src", entry.img)
+      .css({ width: "32px", height: "32px" });
+
+    $logWrapper.append($img, $p.clone());
+    entries.push({ priority: entry.priority, $wrapper: $logWrapper });
+    $p.remove();
+  });
+
+  entries
+    .sort((a, b) => b.priority - a.priority)
+    .forEach(({ $wrapper }) => $container.append($wrapper));
+
+  $allLogs.prepend($container);
+
+  $(".forcejoin").each((_, el) => {
+    $(el).prependTo($allLogs);
+  });
+}
+
+//
+//
+// old shit:
+//
+//
 
 export function enhanceLogs() {
   const currentPlayerName = getCurrentPlayerName();
