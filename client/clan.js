@@ -72,3 +72,31 @@ export async function addClanToEnemies() {
     text: `Добавил всех игроков в контакты (враги).`,
   });
 }
+
+export async function payEmerald(count) {
+  if (!count) {
+    console.log("💎 No count provided for emerald payment.");
+    return;
+  }
+
+  await fetch("https://www.moswar.ru/clanbeast/", {
+    headers: {
+      accept: "*/*",
+      "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+      "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+      "sec-ch-ua": '"Chromium";v="137", "Not/A)Brand";v="24"',
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": '"macOS"',
+      "sec-fetch-dest": "empty",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-site": "same-origin",
+      "x-requested-with": "XMLHttpRequest",
+    },
+    referrer: "https://www.moswar.ru/clanbeast/",
+    referrerPolicy: "strict-origin-when-cross-origin",
+    body: `action=pay_emerald&amount=${count}&ajax=1&__referrer=%2Fclanbeast%2F&return_url=%2Fclanbeast%2F`,
+    method: "POST",
+    mode: "cors",
+    credentials: "include",
+  });
+}

@@ -7,6 +7,7 @@ import {
   eatSnickers,
   farm,
   joinGypsy,
+  joinPahan,
   metroWorkMode,
   patrolMode,
   playGypsy,
@@ -17,7 +18,11 @@ import {
   workMode,
 } from "../alley.js";
 import { carBringupMode, sortGarage } from "../cars.js";
-import { addClanToEnemies, sortClanPlayersByCoolness } from "../clan.js";
+import {
+  addClanToEnemies,
+  payEmerald,
+  sortClanPlayersByCoolness,
+} from "../clan.js";
 import { eatSilly, getStats, restoreHP } from "../dopings.js";
 import startDungeon from "../dungeon-solo.js";
 import { boostClan, joinProt } from "../group-fight.js";
@@ -73,9 +78,10 @@ const assistantButtonsProps = [
     onClick: async () => await signUpForDeps(),
   },
   {
-    text: "☄️",
-    title: "Дух Коммунизма",
-    onClick: async () => await joinGypsy(),
+    text: "🔱",
+    title: "Бой с Паханом",
+    onClick: async () => await joinPahan(),
+    disableAfterClick: false,
   },
   {
     text: "👊",
@@ -403,7 +409,6 @@ async function getCurrencyContainer() {
 export async function redrawMain() {
   // eslint-disable-next-line
   if (AngryAjax.getCurrentUrl() !== "/player/") {
-    console.log("[redrawMain] Not on /player page.");
     return;
   }
 
@@ -460,6 +465,24 @@ export async function redrawMain() {
     ).style.width = "220px";
   }
 
+  function modifyPayEmerald() {
+    const $target = $(`img[data-st='10483']`).closest(".padding");
+    const count = parseInt($target.find(".count").text().replace("#", ""), 10);
+    $target
+      .find(".action span")
+      .text("внести все")
+      .parent()
+      .removeAttr("onclick")
+      .on("click", async () => {
+        await payEmerald(count);
+        sendAlert({
+          title: "Все правильно сделал!",
+          text: `Вы внесли ${count} изумрудов.`,
+          img: "/@/images/obj/clan/emerald.png",
+        });
+      });
+  }
+
   // eslint-disable-next-line no-undef
   const inventoryContainer = document.querySelector(
     "#content > table.inventary > tbody > tr > td.equipment-cell > div > dl > dd > div:nth-child(1)"
@@ -470,6 +493,7 @@ export async function redrawMain() {
   expandPetTab();
   initMultiItemUi();
   initEatDops();
+  modifyPayEmerald();
 
   if (inventoryContainer && inventoryContainer.offsetHeight < 300) {
     console.log("[i] toggle inventory expand");

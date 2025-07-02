@@ -1185,6 +1185,32 @@ export async function joinDeps() {
   );
 }
 
+export async function joinPahan() {
+  await fetch(
+    new URL(window.location.href).origin + "/phone/call/joinPhoneBoss/",
+    {
+      headers: {
+        accept: "application/json, text/javascript, */*; q=0.01",
+        "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",
+        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "sec-ch-ua": '"Not A(Brand";v="8", "Chromium";v="132"',
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": '"macOS"',
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "x-requested-with": "XMLHttpRequest",
+      },
+      body: "ajax=1&slot=phone1&type=phoneboss1",
+      method: "POST",
+      mode: "cors",
+      credentials: "include",
+    }
+  );
+
+  AngryAjax.goToUrl("/alley/");
+}
+
 export async function joinGypsy() {
   const gypsyCooldown = await getElementsOnThePage(
     "#divSignInCampBattle ",

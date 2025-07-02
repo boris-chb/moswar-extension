@@ -21,8 +21,16 @@ const primaryKeywords = [
     img: "/@/images/ico/ability/bentley_abil.png",
   },
   {
+    text: "Игра в Кальмара Жестока",
+    img: "/@/images/loc/squid2025/abils/1.png",
+  },
+  {
     text: "негативные эффекты",
     img: "/@/images/ico/ability/abil_dyson.png",
+  },
+  {
+    text: "облетев вокруг Земли",
+    img: "/@/images/ico/ability/abil_kosmo2.png",
   },
 
   {
@@ -33,6 +41,10 @@ const primaryKeywords = [
     text: "в куклу и тот начинает застывать каждые 2 хода",
     img: "/@/images/loc/squid2025/abils/6.png",
   },
+  {
+    text: "ностальгирует и восстанавливает",
+    img: "https://www.moswar.ru/@/images/ico/ability/car220.png",
+  },
 ];
 
 const secondaryKeywords = [
@@ -40,17 +52,25 @@ const secondaryKeywords = [
     text: "пускает на котошаверму сердитого котика",
     img: "/@/images/obj/../ico/ability/burrito_abil.png",
   },
-  {
-    text: "делает кусь питомцу",
-    img: "/@/images/obj/../ico/ability/wolfie_2.png",
-  },
-  {
-    text: "бьет хвостом и игрок",
-    img: "/@/images/ico/ability/dino5.png",
-  },
+  // {
+  //   text: "делает кусь питомцу",
+  //   img: "/@/images/obj/../ico/ability/wolfie_2.png",
+  // },
+  // {
+  //   text: "бьет хвостом и игрок",
+  //   img: "/@/images/ico/ability/dino5.png",
+  // },
   {
     text: "привез на бронепоезде могучего союзника",
     img: "/@/images/ico/ability/kim_sum2.png",
+  },
+  {
+    text: "Черная дыра приходит на помощь",
+    img: "/@/images/ico/ability/black_hole.png",
+  },
+  {
+    text: "Воронка приходит на помощь",
+    img: "/@/images/ico/ability/tugboat.png",
   },
 ];
 
