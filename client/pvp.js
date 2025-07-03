@@ -763,6 +763,9 @@ async function customRoll(top = false) {
   $(".worldtour-stats").replaceWith(newStats);
   // replace worldtour container
   $(".worldtour__team.worldtour__team--right").replaceWith(newOpponentStats);
+  // add tooltip to opponent stats
+  console.log(newOpponentStats.children().first());
+  simple_tooltip(newOpponentStats.children().first());
 
   replaceRollBtnHandlers();
 }

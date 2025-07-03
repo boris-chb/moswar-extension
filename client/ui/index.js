@@ -6,7 +6,6 @@ import {
   checkBronikPieces,
   eatSnickers,
   farm,
-  joinGypsy,
   joinPahan,
   metroWorkMode,
   patrolMode,
@@ -80,7 +79,11 @@ const assistantButtonsProps = [
   {
     text: "🔱",
     title: "Бой с Паханом",
-    onClick: async () => await joinPahan(),
+    onClick: async () => {
+      if (confirm("Записаться на пахана?")) {
+        joinPahan();
+      }
+    },
     disableAfterClick: false,
   },
   {
@@ -483,6 +486,19 @@ export async function redrawMain() {
       });
   }
 
+  function reorderInventory() {
+    const topItems = [14820, 10292, 8799, 813, 10097, 14730, 3347, 4020];
+    const container = $('.htabs-submenu[rel="inventory"]').first();
+    const fragments = $();
+
+    topItems.forEach((id) => {
+      const item = $(`.object-thumb:has(img[data-st='${id}'])`);
+      if (item.length) fragments.push(item[0]);
+    });
+
+    container.after(fragments);
+  }
+
   // eslint-disable-next-line no-undef
   const inventoryContainer = document.querySelector(
     "#content > table.inventary > tbody > tr > td.equipment-cell > div > dl > dd > div:nth-child(1)"
@@ -494,6 +510,7 @@ export async function redrawMain() {
   initMultiItemUi();
   initEatDops();
   modifyPayEmerald();
+  reorderInventory();
 
   if (inventoryContainer && inventoryContainer.offsetHeight < 300) {
     console.log("[i] toggle inventory expand");
