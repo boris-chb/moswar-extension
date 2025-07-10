@@ -21,7 +21,7 @@ export let OPTIONS = {
   ],
 };
 
-const ABILITIES = {
+export const ABILITIES = {
   roar: -310,
   topot: -311,
   krovotok: -313,
@@ -362,8 +362,7 @@ async function rollPvp(top = false) {
     return false;
   }
 }
-
-async function useAbility(abilityId) {
+export async function useAbility(abilityId) {
   await fetch(new URL(window.location.href).origin + "/fight/", {
     headers: {
       "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -785,9 +784,13 @@ function renderPvpTotals() {
   });
 
   const $totalsElement = $(
-    `<span id="pvp-totals" style="font-size:140%" class="dpoints">${totals.current} / ${totals.max}<i></i></span>`
+    `<span id="pvp-totals" style="font-size:140%" class="dpoints">
+    <br>${totals.current} / ${totals.max}<i></i>
+    </span>`
   );
-  $(".worldtour-stats__content").append($totalsElement);
+  $(".worldtour-stats__content")
+    .css({ background: "#000" })
+    .append($totalsElement);
 
   $("span.dpoints").css({
     "text-shadow": "1px 1px 1px #00000073",

@@ -79,7 +79,7 @@ export async function payEmerald(count) {
     return;
   }
 
-  await fetch("https://www.moswar.ru/clanbeast/", {
+  await fetch(new URL(window.location.href).origin + "/clanbeast/", {
     headers: {
       accept: "*/*",
       "accept-language": "en-GB,en-US;q=0.9,en;q=0.8",

@@ -13,7 +13,7 @@ export const EXCEPTION_PLANES_AND_BOATS_RIDES_IDS = [158, 219, 155, 121]; // zep
 
 // вв
 export const PLANES_AND_BOATS_RIDES_IDS = [
-  192, 158, 219, 155, 121, 190, 223, 93, 97, 135, 182, 178, 195, 59, 216, 212,
+  158, 121, 219, 155, 192, 190, 223, 93, 97, 135, 182, 178, 195, 59, 216, 212,
   183, 173, 159, 156, 149, 146, 134, 119, 111, 95, 88, 84, 78, 74, 69, 68, 65,
   58, 55, 54, 52, 51, 49, 44, 38, 36, 35,
 ];
@@ -293,6 +293,17 @@ export function sortGarage() {
   });
 
   let $items = $("#content > div > div.cars-trip-choose.clearfix > div ul li");
+
+  // fill tank before sending car
+  $items.each(function () {
+    const $btn = $(this).find(".ride-button");
+    $btn.on("click", async function (e) {
+      e.preventDefault();
+      const carId = $(this).closest("li").find("input.car-id").val();
+      await fillCarTank(carId);
+      $(this).closest("form").submit();
+    });
+  });
 
   function sortAndReattach($items) {
     let { exceptionCars, planesAndBoats, rest, bannedCars } =

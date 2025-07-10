@@ -199,7 +199,7 @@ const navLinks = [
   { href: "/berezka/section/mixed/", text: "🛍️ Березка" },
   { href: "/metrowar/clan/", text: "🚇 Метровар" },
   { href: "/sovet/career/", text: "👔 ГосПром" },
-  { href: "/meetings/", text: "🪧 Миты" },
+  { href: "/meetings/team/", text: "🪧 Миты" },
   { href: "/petarena/", text: "🦮 Петы" },
   { href: "/squid/", text: "🦑 Кальмар" },
   { href: "/travel2/", text: "🌍 Рейды" },
@@ -478,6 +478,8 @@ export async function redrawMain() {
       .removeAttr("onclick")
       .on("click", async () => {
         await payEmerald(count);
+
+        AngryAjax.reload();
         sendAlert({
           title: "Все правильно сделал!",
           text: `Вы внесли ${count} изумрудов.`,
@@ -486,7 +488,7 @@ export async function redrawMain() {
       });
   }
 
-  function reorderInventory() {
+  function sortInventory() {
     const topItems = [14820, 10292, 8799, 813, 10097, 14730, 3347, 4020];
     const container = $('.htabs-submenu[rel="inventory"]').first();
     const fragments = $();
@@ -510,7 +512,8 @@ export async function redrawMain() {
   initMultiItemUi();
   initEatDops();
   modifyPayEmerald();
-  reorderInventory();
+
+  setTimeout(sortInventory, 500);
 
   if (inventoryContainer && inventoryContainer.offsetHeight < 300) {
     console.log("[i] toggle inventory expand");
@@ -2059,6 +2062,8 @@ function isGroupFight() {
   const url = location.pathname;
   if (url.match(/^(?!.*\/alley\/).*\/fight\//)) {
     return true;
+  } else {
+    return false;
   }
 }
 

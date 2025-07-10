@@ -54,9 +54,9 @@ async function getPetAbilities(petId) {
     return hasAction || hasTimer;
   });
 
-  abilities.each((_, el) => {});
+  // abilities.each((_, el) => {});
 
-  console.log(abilities);
+  // console.log(abilities);
 
   return abilities;
 }
