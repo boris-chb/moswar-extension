@@ -25,13 +25,13 @@ export const BANNED_CARS_RIDES_IDS = [
 const PRESETS = [
   {
     name: "🚙 Тачки 6 ч.",
-    rides: [1, 2, 3, 4, 5, 6, 86],
+    rides: [1, 2, 3, 4, 5, 6, 86, 162, 42],
   },
   {
     name: "🏎️ Тачки 10-12 ч.",
     rides: [
       7, 8, 9, 10, 11, 12, 45, 50, 80, 83, 98, 163, 164, 191, 213, 214, 222,
-      110, 197, 92,
+      110, 197, 92, 96, 221,
     ],
   },
   {
@@ -286,7 +286,12 @@ export function sortGarage() {
   const sendCarsPresetsBtns = PRESETS.map((preset) => {
     const btn = createButton({
       text: preset.name,
-      onClick: async () => await sendCars(preset.rides),
+      onClick: async () => {
+        if (confirm(`Отправить ${preset.name}?`)) {
+          await sendCars(preset.rides);
+        }
+      },
+      disableAfterClick: false,
     });
 
     return btn;
@@ -320,41 +325,52 @@ export function sortGarage() {
       (el) => getCarCooldown($(el)) > 0
     ).length;
 
-    const cooldownCarsCount = [...rest, ...exceptionCars].filter((el) => {
-      const [chinuk, buksir] = [64, 198];
-      const rideId = +$(el).attr("data-direction-id");
-      if (rideId === chinuk || rideId === buksir) {
-        return false;
+    const cooldownCarsCount = [...rest, ...exceptionCars, ...bannedCars].filter(
+      (el) => {
+        const [chinuk, buksir] = [64, 198];
+        const rideId = +$(el).attr("data-direction-id");
+        if (rideId === chinuk || rideId === buksir) {
+          return false;
+        }
+
+        return getCarCooldown($(el)) > 0;
       }
+    ).length;
 
-      return getCarCooldown($(el)) > 0;
-    }).length;
+    const carsCountDiv = $(`
+      <div id="cars-count">
+        <span>Отправлено вв: <b>${cooldownBoatsCount}</b> ✈️ 🚢</span><br>
+        <span>Отправлено тачек: <b>${cooldownCarsCount}</b> 🚙</span>
+      </div>
+    `).css({
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "flex-start",
+      alignItems: "center",
+      gap: "8px",
+    });
 
-    const carsCountDiv = $(
-      `<div class="income" id="divAutoIncome">
-        Отправлено вв: <b>${cooldownBoatsCount}</b> ✈️ 🚢
-      </br>
-        Отправлено тачек: <b>${cooldownCarsCount}</b> 🚙
-      </div>`
-    );
+    const buttonsGrid = $("<div></div>")
+      .css({
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: "8px",
+        justifyContent: "center",
+        width: "50%",
+      })
+      .append(sendPlanesAndBoatsBtn)
+      .append(sendCarsPresetsBtns);
 
-    const flexDiv = $("<div id='send-cars-controls'>")
-      .css("display", "flex")
-      .css("gap", "8px")
-      .css("justify-content", "center")
-      .append(
-        $("<div></div>")
-          .css({
-            display: "flex",
-            gap: "8px",
-            "justify-content": "center",
-          })
-          .append(sendPlanesAndBoatsBtn)
-          .append(sendCarsPresetsBtns)
-      )
+    const carsControlDiv = $("<div id='send-cars-controls'>")
+      .css({
+        display: "flex",
+        gap: "8px",
+        justifyContent: "space-evenly",
+      })
+      .append(buttonsGrid)
       .append(carsCountDiv);
 
-    $("#content > div > div.block-bordered").html(flexDiv);
+    $("#content > div > div.block-bordered").html(carsControlDiv);
 
     let $parent = $("#content > div > div.cars-trip-choose.clearfix > div ul");
     $(sortedItems).appendTo($parent);

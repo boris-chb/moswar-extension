@@ -1,3 +1,5 @@
+/* global $, showAlert, showConfirm */
+
 export let OPTIONS = {
   // если вы готовы пожертвовать 2% славы, то задайте значение 0.02:
   // если теоретический макс 1000, то -2% значит что вы готовы атаковать противника
@@ -789,7 +791,7 @@ function renderPvpTotals() {
     </span>`
   );
   $(".worldtour-stats__content")
-    .css({ background: "#000" })
+    .css({ background: "#00034a" })
     .append($totalsElement);
 
   $("span.dpoints").css({
@@ -797,9 +799,9 @@ function renderPvpTotals() {
   });
 }
 
-function handleSkipFight() {
+async function handleSkipFight() {
   $(document).one("ajaxStop", handlePvpFight);
-  Worldtour2.startFight();
+  await pvpStartFight();
 }
 
 function handleInfiniteFight() {
@@ -842,16 +844,34 @@ function helpersUI() {
   $(".worldtour__pagination").remove();
 }
 
+function highlightFullCountries() {
+  $("#travel-2-country option").each(function () {
+    let text = $(this).text();
+    const match = text.match(/(\d+)\/(\d+)/);
+    if (!match) return;
+
+    const current = parseInt(match[1], 10);
+    const total = parseInt(match[2], 10);
+
+    text = text.replace(/[✔?]/, current === total ? "✅" : "⏳");
+    $(this).text(text);
+  });
+}
+
 export function initPvpUI() {
   if ($("#skip-fight-btn").length) return;
   replaceRollBtnHandlers();
   helpersUI();
   renderPvpTotals();
+  highlightFullCountries();
 
   // fix rating misalignment
   $(".worldtour-rating-place").css({ position: "absolute" });
 
-  if (document.querySelector(".auto-pvp")) {
+  // move геометки banner to the bottom
+  $(".worldtour-banner").appendTo($(".worldtour-banner").parent());
+
+  if ($(".auto-pvp").length > 0) {
     console.log("[PVP] Panel already initialized.");
     return;
   }
