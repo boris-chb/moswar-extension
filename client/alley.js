@@ -122,24 +122,6 @@ export async function joinBankRobbery() {
   );
 }
 
-export async function placeHuntOrder(preyList) {
-  if (!preyList) {
-    preyList = HUNT_CLUB_PREYS;
-  }
-  preyList.forEach(async (playerName) => {
-    await fetch(new URL(window.location.href).origin + "/huntclub/zakaz/", {
-      headers: {
-        accept: "*/*",
-        "accept-language": "en-GB,en;q=0.9",
-        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
-        "x-requested-with": "XMLHttpRequest",
-      },
-      body: `player=7059277&nickname=${playerName}&comment=&award=${+player.level * 100}&vip=on&__ajax=1&return_url=%2Fhuntclub%2F`,
-      method: "POST",
-    });
-  });
-}
-
 // region 3 === вокзальный
 export async function startPatrol(timeMin = 10, region = 1) {
   // AngryAjax.goToUrl("/alley/");

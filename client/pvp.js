@@ -624,7 +624,7 @@ async function pvpStartFight() {
     },
     referrer: new URL(window.location.href).origin + "/travel2/",
     referrerPolicy: "strict-origin-when-cross-origin",
-    body: "action=fight&ajax=1&__referrer=%2Ftravel2%2F&return_url=%2Ftravel2%2F",
+    body: "action=fight",
     method: "POST",
     mode: "cors",
     credentials: "include",

@@ -301,6 +301,21 @@ export function sortGarage() {
 
   // fill tank before sending car
   $items.each(function () {
+    const id = $(this).data("direction-id");
+    if (id) {
+      const span = $("<span>").text(id).css({
+        position: "absolute",
+        color: "whitesmoke",
+        right: "3%",
+        zIndex: 10,
+        background: "black",
+        borderRadius: "4px",
+        padding: "2px",
+      });
+
+      $(this).prepend(span);
+    }
+
     const $btn = $(this).find(".ride-button");
     $btn.on("click", async function (e) {
       e.preventDefault();
@@ -314,6 +329,8 @@ export function sortGarage() {
     let { exceptionCars, planesAndBoats, rest, bannedCars } =
       categorizeCars($items);
 
+    const allCars = [...exceptionCars, ...rest, ...bannedCars];
+
     let sortedItems = [
       ...exceptionCars,
       ...planesAndBoats,
@@ -325,22 +342,20 @@ export function sortGarage() {
       (el) => getCarCooldown($(el)) > 0
     ).length;
 
-    const cooldownCarsCount = [...rest, ...exceptionCars, ...bannedCars].filter(
-      (el) => {
-        const [chinuk, buksir] = [64, 198];
-        const rideId = +$(el).attr("data-direction-id");
-        if (rideId === chinuk || rideId === buksir) {
-          return false;
-        }
-
-        return getCarCooldown($(el)) > 0;
+    const cooldownCarsCount = allCars.filter((el) => {
+      const [chinuk, buksir] = [64, 198];
+      const rideId = +$(el).attr("data-direction-id");
+      if (rideId === chinuk || rideId === buksir) {
+        return false;
       }
-    ).length;
+
+      return getCarCooldown($(el)) > 0;
+    }).length;
 
     const carsCountDiv = $(`
       <div id="cars-count">
-        <span>Отправлено вв: <b>${cooldownBoatsCount}</b> ✈️ 🚢</span><br>
-        <span>Отправлено тачек: <b>${cooldownCarsCount}</b> 🚙</span>
+        <span>Отправлено вв: <b>${cooldownBoatsCount} /  ${planesAndBoats.length}</b> ✈️ 🚢</span>
+        <span>Отправлено тачек: <b>${cooldownCarsCount} / ${allCars.length}</b> 🚙</span>
       </div>
     `).css({
       display: "flex",
