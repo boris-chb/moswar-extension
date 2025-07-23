@@ -1,6 +1,5 @@
 /* global $ Gypsy player cooldownReset jobShowTonusAlert groupFightMakeStep AngryAjax showAlert */
 
-import { HUNT_CLUB_PREYS } from "./data.js";
 import { heal, restoreHP, useItem } from "./dopings.js";
 import { aIsGroupFight, sendAlert, waitForCooldown } from "./index.js";
 import { addToContacts, removeFromContacts } from "./phone.js";

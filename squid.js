@@ -44,4 +44,6 @@ function getSquidPlayer(playerId) {
   );
 }
 
-squidIds.forEach(getSquidPlayer);
+for (let i = 0; i < squidIds.length; i++) {
+  getSquidPlayer(squidIds[i]);
+}

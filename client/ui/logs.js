@@ -52,6 +52,10 @@ const secondaryKeywords = [
     text: "пускает на котошаверму сердитого котика",
     img: "/@/images/obj/../ico/ability/burrito_abil.png",
   },
+  {
+    text: "так потянул канат",
+    img: "/@/images/obj/../ico/ability/squid_4.png",
+  },
   // {
   //   text: "делает кусь питомцу",
   //   img: "/@/images/obj/../ico/ability/wolfie_2.png",

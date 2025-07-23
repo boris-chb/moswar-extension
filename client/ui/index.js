@@ -89,8 +89,8 @@ const assistantButtonsProps = [
   {
     text: "👊",
     title:
-      "25 боев в закоулки оборотнем (уровень оборотня - 1)\nнужны: оборотень включен + мажор + сникерсы/тонус!)",
-    onClick: async () => await farm(25),
+      "50 боев в закоулки оборотнем (уровень оборотня - 1)\nнужны: оборотень + мажор + сникерсы/тонус)",
+    onClick: async () => await farm(50),
     disableAfterClick: false,
   },
   {
@@ -2346,6 +2346,8 @@ export function handleUI() {
     $(".actions.bets").append(btnInputField);
   } else if (url === "/arbat/") {
     redrawArbat();
+  } else if (url === "/pyramid/") {
+    $("#pyramid-buy-form input").css({ width: "70px" });
   } else if (url.includes("clan")) {
     if ($("#reorder-clan").length) return;
     const coolnessSpan = $(
