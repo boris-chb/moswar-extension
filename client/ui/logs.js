@@ -78,7 +78,107 @@ const secondaryKeywords = [
   },
 ];
 
-export function redrawGroupFightLogs() {
+function sortPlayersList(parent) {
+  if (!parent) parent = $(".list-users--left");
+  const me = parent.find("li.me");
+  if (me.length) me.prependTo(parent);
+
+  // helpers
+  const getRageWidth = (el) => {
+    const match = $(el)
+      .find('.player-rage .bar[tooltip="1"] .percent')
+      .attr("style")
+      ?.match(/width:(\d+(\.\d+)?)%/);
+    return match ? parseFloat(match[1]) : 0;
+  };
+
+  const getName = (el) => $(el).find('.user a[href^="/player/"]').text().trim();
+
+  const parseHP = (el) => {
+    const raw = $(el).find(".fighter_hp").text().split("/")[1]?.trim();
+    if (!raw) return 0;
+
+    const match = raw.match(/([\d.,]+)([BkM]?)/);
+    if (!match) return 0;
+
+    let num = parseFloat(match[1].replace(",", "."));
+    const unit = match[2];
+
+    switch (unit) {
+      case "B":
+        return num * 1e9;
+      case "M":
+        return num * 1e6;
+      case "k":
+        return num * 1e3;
+      default:
+        return num;
+    }
+  };
+
+  // categorize
+  const players = [],
+    clones = [],
+    specialNpcs = [],
+    secondaryNpcs = [];
+
+  parent
+    .find("li")
+    .not(".me")
+    .each(function () {
+      const el = this;
+      const hasRage = $(el).find(
+        '.player-rage .bar[tooltip="1"] .percent'
+      ).length;
+
+      if (hasRage) {
+        const name = getName(el);
+        if (/^Клон «/.test(name)) clones.push(el);
+        else if (name === "Брат Михалыча") specialNpcs.push(el);
+        else players.push(el);
+      } else {
+        secondaryNpcs.push(el);
+      }
+    });
+
+  // sort
+  const sortByRage = (arr) =>
+    arr.sort((a, b) => getRageWidth(b) - getRageWidth(a));
+  const sortByMaxHP = (arr) => arr.sort((a, b) => parseHP(b) - parseHP(a));
+
+  sortByRage(players);
+  sortByRage(clones);
+  sortByRage(specialNpcs);
+  sortByMaxHP(secondaryNpcs);
+
+  // containers
+  const playerContainer = $('<div class="sorted-players-container">');
+  const cloneContainer = $('<div class="sorted-clones-container">');
+  const specialNpcContainer = $('<div class="sorted-special-npcs-container">');
+  const secondaryNpcContainer = $(
+    '<div class="sorted-secondary-npcs-container">'
+  );
+
+  players.forEach((el) => playerContainer.append(el));
+  clones.forEach((el) => cloneContainer.append(el));
+  specialNpcs.forEach((el) => specialNpcContainer.append(el));
+  secondaryNpcs.forEach((el) => secondaryNpcContainer.append(el));
+
+  // insert containers in order
+  if (me.length) {
+    secondaryNpcContainer.insertAfter(me);
+    specialNpcContainer.insertAfter(me);
+    cloneContainer.insertAfter(me);
+    playerContainer.insertAfter(me);
+  } else {
+    parent.prepend(secondaryNpcContainer);
+    parent.prepend(specialNpcContainer);
+    parent.prepend(cloneContainer);
+    parent.prepend(playerContainer);
+  }
+}
+
+export function enhanceGroupFightLogs() {
   if ($("#enhanced-logs").length) return;
 
   const $allLogs = $log.find("div.text");
@@ -94,11 +194,15 @@ export function redrawGroupFightLogs() {
     ...primaryKeywords.map((k) => ({ ...k, priority: 1 })),
   ];
 
-  const $matching = $log
-    .find("div.text p")
-    .filter((_, p) =>
-      allKeywords.some(({ text }) => $(p).text().includes(text))
-    );
+  const $matching = $log.find("div.text p").filter((_, p) => {
+    const $p = $(p);
+    // remove Брат Михалыча rupor logs
+    if ($p.hasClass("rupor") && $p.text().includes("Брат Михалыча")) {
+      $p.remove();
+      return false;
+    }
+    return allKeywords.some(({ text }) => $p.text().includes(text));
+  });
 
   const entries = [];
 
@@ -136,13 +240,14 @@ export function redrawGroupFightLogs() {
   });
 }
 
-//
-//
-// old shit:
-//
-//
+export function sortGroupFightPlayers() {
+  // Run the function on both left and right lists
+  $(".list-users--left, .list-users--right").each(function () {
+    sortPlayersList($(this));
+  });
+}
 
-export function enhanceLogs() {
+export function LEGAGY_enhanceLogs() {
   const currentPlayerName = getCurrentPlayerName();
   const $logsContainer = $(".log > ul.fight-log .text");
 
@@ -156,7 +261,7 @@ export function enhanceLogs() {
 
   // Run the function on both left and right lists
   $(".list-users--left, .list-users--right").each(function () {
-    sortPlayersLists($(this));
+    sortPlayersList($(this));
   });
 
   // sort logs
@@ -397,150 +502,6 @@ export function enhanceLogs() {
   if (!$(".me-logs").length && $myLogsContainer.length > 0) {
     $logsContainer.prepend($myLogsDropdown);
   }
-}
-
-function sortPlayersLists($container) {
-  var $rageContainer = $("<div>")
-    .css("display", "flex")
-    .css("flexDirection", "column");
-
-  var $me,
-    $dead = [],
-    $players = [],
-    $brothersMikhalycha = [];
-
-  $container.find("li").each(function () {
-    var $li = $(this);
-    var $playerRage = $li.find(".player-rage");
-
-    if ($playerRage.length) {
-      var rageWidth = parseFloat($playerRage.find(".percent").css("width"));
-
-      // Identify the current player and add them to the correct array
-      if ($li.hasClass("me")) {
-        $me = $li;
-      } else if ($li.hasClass("dead")) {
-        $dead.push($li);
-      } else if ($li.find(".user").text().includes("Брат Михалыча")) {
-        // Check for "Брат Михалыча" and add to $brothersMikhalycha
-        $brothersMikhalycha.push({ li: $li, rage: rageWidth });
-      } else {
-        // Sort the rest by the rage width (descending)
-        $players.push({ li: $li, rage: rageWidth });
-      }
-    }
-  });
-
-  // Sort players based on rage width (descending)
-  $players.sort(function (a, b) {
-    return b.rage - a.rage; // Descending order
-  });
-
-  // Sort "Брат Михалыча" players based on their rage width (descending)
-  $brothersMikhalycha.sort(function (a, b) {
-    return b.rage - a.rage; // Descending order
-  });
-
-  // Prepend the current player, append sorted players, then Брат Михалыча, and finally dead players
-  if ($me) $rageContainer.prepend($me);
-
-  // Append sorted players
-  $players.forEach(function (player) {
-    $rageContainer.append(player.li);
-  });
-
-  // Append "Брат Михалыча" players
-  $brothersMikhalycha.forEach(function (player) {
-    $rageContainer.append(player.li);
-  });
-
-  // Append dead players
-  $dead.forEach(function ($li) {
-    $rageContainer.append($li);
-  });
-
-  // Prepend the container with sorted players to the list
-  $container.prepend($rageContainer);
-}
-
-function formatTrainAttackLog($p) {
-  const match = $p.html().match(/(.*?)пострадали:\s*(.*)/);
-  if (!match) return;
-
-  const mainText = match[1].trim();
-  const players = match[2].split(/,\s*/).map((player) => player.trim());
-
-  $p.empty().css({
-    display: "flex",
-    flexDirection: "column",
-  });
-
-  // Top div with icon
-  const $topDiv = $("<div>").css({
-    display: "flex",
-    alignItems: "center",
-  });
-
-  const $img = $("<img>")
-    .attr("src", "/@/images/ico/ability/kim_sum2.png")
-    .css({
-      width: "32px",
-      height: "32px",
-    });
-
-  const $textSpan = $("<span>").html(mainText);
-
-  $topDiv.append($img).append($textSpan);
-
-  // Grid for players
-  const $gridDiv = $("<div>").css({
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
-    gap: "4px",
-  });
-
-  players.forEach((player) => {
-    const playerWithConvertedNumber = player.replace(/-?\d+/g, (match) =>
-      formatNumber(Number(match))
-    );
-    $gridDiv.append(playerWithConvertedNumber);
-  });
-
-  $p.append($topDiv).append($gridDiv);
-}
-
-function formatDefenderLogs() {
-  $(".text").each(function () {
-    var $container = $(this);
-    var $pContainer = $("<p>", { class: "defender-log" });
-    var $nodes = $container.contents();
-    var parts = [];
-
-    for (var i = 0; i < $nodes.length; i++) {
-      var node = $nodes[i];
-      if (node.nodeType === 1 && node.tagName === "P") break; // Stop at the first <p>
-      $pContainer.append(node);
-    }
-
-    if ($pContainer.contents().length) {
-      let rawText = $pContainer
-        .html()
-        .split(".")
-        .filter((p) => p.trim() !== "");
-      if (rawText.length > 0) {
-        let firstSentence = rawText[0].replace(" жизней", "");
-        let otherSentences = rawText.slice(1).map((p) =>
-          p
-            .replace(/.*?бьет /, "")
-            .replace(" жизней", "")
-            .trim()
-        );
-        $pContainer.html(`${firstSentence}, ${otherSentences.join(", ")}.`);
-        addIcon($pContainer, "/@/images/obj/relict/rock17_128.png");
-      }
-      $container.prepend($pContainer);
-    }
-  });
 }
 
 function addIcon($p, src) {

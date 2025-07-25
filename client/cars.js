@@ -281,6 +281,8 @@ export function sortGarage() {
   const sendPlanesAndBoatsBtn = createButton({
     text: "🚢 ✈️ Отправить вв",
     onClick: sendPlanesAndBoats,
+    special: true,
+    disableAfterClick: false,
   });
 
   const sendCarsPresetsBtns = PRESETS.map((preset) => {
@@ -292,6 +294,7 @@ export function sortGarage() {
         }
       },
       disableAfterClick: false,
+      special: true,
     });
 
     return btn;
@@ -354,14 +357,14 @@ export function sortGarage() {
 
     const carsCountDiv = $(`
       <div id="cars-count">
-        <span>Отправлено вв: <b>${cooldownBoatsCount} /  ${planesAndBoats.length}</b> ✈️ 🚢</span>
-        <span>Отправлено тачек: <b>${cooldownCarsCount} / ${allCars.length}</b> 🚙</span>
+        <span>• Отправлено вв: <b>${cooldownBoatsCount} /  ${planesAndBoats.length}</b> ✈️ 🚢</span>
+        <span>• Отправлено тачек: <b>${cooldownCarsCount} / ${allCars.length}</b> 🚙</span>
       </div>
     `).css({
       display: "flex",
       flexDirection: "column",
-      justifyContent: "flex-start",
-      alignItems: "center",
+      justifyContent: "center",
+      alignItems: "start",
       gap: "8px",
     });
 

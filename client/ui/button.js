@@ -1,6 +1,6 @@
-/* global $ showAlert */
+/* global $  simple_tooltip */
 
-import { formatTime, strToHtml } from "../utils.js";
+import { strToHtml } from "../utils.js";
 
 export function createButton({
   text,
@@ -8,9 +8,10 @@ export function createButton({
   title,
   className,
   disableAfterClick = true,
+  special = false,
 }) {
   let btn = strToHtml(
-    `<button type="button" class="${className ? className + "-btn" : ""} button"><span style="float: none;" class="f"><i class="rl"></i><i class="bl"></i><i class="brc"></i><div class="c">${text}</div></span></button>`
+    `<button type="button" class="${className ? className + "-btn" : ""} ${special ? "autopilot-action" : "button"}"><span style="float: none;" class="f"><i class="rl"></i><i class="bl"></i><i class="brc"></i><div class="c">${text}</div></span></button>`
   );
 
   // Function to update button text without breaking the structure
@@ -37,6 +38,17 @@ export function createButton({
   if (title) {
     btn.title = title;
   }
+
+  if (special) {
+    $(btn).css({
+      border: "2px solid #3048a5",
+      fontSize: "10px",
+      minWidth: "120px",
+      lineHeight: "18px",
+    });
+  }
+
+  simple_tooltip($(btn));
 
   return btn;
 }

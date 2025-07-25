@@ -1,7 +1,6 @@
 /* global $ AngryAjax fightForward */
 
 import {
-  chaoticFightMode,
   getAlleyCooldown,
   patrolMode,
   trackRatMode,
