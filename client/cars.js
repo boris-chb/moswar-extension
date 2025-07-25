@@ -362,28 +362,40 @@ export function sortGarage() {
       </div>
     `).css({
       display: "flex",
-      flexDirection: "column",
+      flexDirection: "row",
       justifyContent: "center",
       alignItems: "start",
       gap: "8px",
+      fontSize: "18px",
+      lineHeight: "16px",
+      textTransform: "uppercase",
+      fontFamily: "bloccregular",
+      padding: "8px 0px",
     });
 
-    const buttonsGrid = $("<div></div>")
+    const buttonsGrid = $("<div id='send-cars-buttons'></div>")
       .css({
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: "8px",
+        display: "flex",
+        flexWrap: "wrap",
         justifyContent: "center",
-        width: "50%",
+        gap: "8px",
+        width: "80%",
       })
       .append(sendPlanesAndBoatsBtn)
       .append(sendCarsPresetsBtns);
 
+    buttonsGrid.children().css({
+      flex: "1 0 30%",
+      maxWidth: "30%",
+    });
+
     const carsControlDiv = $("<div id='send-cars-controls'>")
       .css({
         display: "flex",
+        flexDirection: "column",
         gap: "8px",
-        justifyContent: "space-evenly",
+        justifyContent: "center",
+        alignItems: "center",
       })
       .append(buttonsGrid)
       .append(carsCountDiv);

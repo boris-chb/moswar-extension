@@ -1,5 +1,6 @@
-/* global AngryAjax, $, showAlert, simple_tooltip */
+/* global AngryAjax, $, showAlert, simple_tooltip  Worldtour2 */
 
+import { makeTurn } from ".";
 import { parseHtml } from "./utils";
 
 export const ABILITIES = {
@@ -12,7 +13,7 @@ export const ABILITIES = {
   mass: 543,
 };
 
-export async function handlePvpFight() {
+export async function skipPvpFight() {
   if (!AngryAjax.getCurrentUrl().includes("fight")) return;
   if (!$(".block-rounded").children().first().hasClass("current")) {
     showAlert("Ошибка", "Перейдите на последний ход!");
@@ -36,6 +37,7 @@ export async function handlePvpFight() {
   await useAbility(ABILITIES.topot);
   await useAbility(ABILITIES.mass);
   await useAbility(ABILITIES.invincible);
+  await makeTurn(1);
 }
 
 export async function useAbility(abilityId) {
@@ -172,6 +174,8 @@ function renderPvpTotals() {
 }
 
 function redrawPvpContent() {
+  if (Worldtour2.step === Worldtour2.maxStep) return;
+
   const agiotage = [
     ...$("#slava_info")
       .text()

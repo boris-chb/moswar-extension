@@ -1,6 +1,6 @@
 /* global $ */
 
-import { handlePvpFight } from "../pvp";
+import { skipPvpFight } from "../pvp";
 import { createButton } from "./button";
 import { LEGAGY_enhanceLogs } from "./logs";
 
@@ -996,7 +996,7 @@ export function LEGACY_initGroupFightLogs() {
         if (!$(".block-rounded .cleanup-logs-btn").length) {
           var skipNpcFightButton = createButton({
             text: "⏩",
-            onClick: async () => await handlePvpFight(),
+            onClick: async () => await skipPvpFight(),
             title: "Пропустить НПС бой",
           });
 

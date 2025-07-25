@@ -1,5 +1,6 @@
 /* global $ $log showAlert */
 
+import { skipPvpFight } from "../pvp.js";
 import { formatNumber } from "../utils";
 import { createButton, createDropdown } from "./button.js";
 
@@ -117,7 +118,8 @@ function sortPlayersList(parent) {
   };
 
   // categorize
-  const players = [],
+  const alivePlayers = [],
+    deadPlayers = [],
     clones = [],
     specialNpcs = [],
     secondaryNpcs = [];
@@ -135,7 +137,8 @@ function sortPlayersList(parent) {
         const name = getName(el);
         if (/^Клон «/.test(name)) clones.push(el);
         else if (name === "Брат Михалыча") specialNpcs.push(el);
-        else players.push(el);
+        else if ($(el).hasClass("dead")) deadPlayers.push(el);
+        else alivePlayers.push(el);
       } else {
         secondaryNpcs.push(el);
       }
@@ -146,7 +149,8 @@ function sortPlayersList(parent) {
     arr.sort((a, b) => getRageWidth(b) - getRageWidth(a));
   const sortByMaxHP = (arr) => arr.sort((a, b) => parseHP(b) - parseHP(a));
 
-  sortByRage(players);
+  sortByRage(alivePlayers);
+  sortByRage(deadPlayers);
   sortByRage(clones);
   sortByRage(specialNpcs);
   sortByMaxHP(secondaryNpcs);
@@ -159,7 +163,8 @@ function sortPlayersList(parent) {
     '<div class="sorted-secondary-npcs-container">'
   );
 
-  players.forEach((el) => playerContainer.append(el));
+  alivePlayers.forEach((el) => playerContainer.append(el));
+  deadPlayers.forEach((el) => playerContainer.append(el));
   clones.forEach((el) => cloneContainer.append(el));
   specialNpcs.forEach((el) => specialNpcContainer.append(el));
   secondaryNpcs.forEach((el) => secondaryNpcContainer.append(el));
@@ -245,6 +250,34 @@ export function sortGroupFightPlayers() {
   $(".list-users--left, .list-users--right").each(function () {
     sortPlayersList($(this));
   });
+}
+
+export function redrawLogsPagination() {
+  if ($(".pagination").length) return;
+  var fightGroupForm = $("#fightGroupForm");
+
+  var logTurnsNavbar = fightGroupForm
+    .find(".pagescroll")
+    .clone()
+    .addClass("pagination");
+
+  // Add the cleanup button inside .block-rounded
+  if (!$(".block-rounded .cleanup-logs-btn").length) {
+    var skipNpcFightButton = createButton({
+      text: "⏩",
+      onClick: async () => await skipPvpFight(),
+      title: "Пропустить НПС бой",
+    });
+
+    $(skipNpcFightButton)
+      .addClass("skip-npc-fight-btn")
+      .css({ margin: "2px 6px" });
+
+    logTurnsNavbar.children().first().append(skipNpcFightButton);
+  }
+
+  fightGroupForm.prepend(logTurnsNavbar);
+  $(".log-panel").prepend($(".fight-slots-actions"));
 }
 
 export function LEGAGY_enhanceLogs() {

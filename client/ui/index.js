@@ -26,7 +26,7 @@ import { eatSilly, getStats, restoreHP } from "../dopings.js";
 import startDungeon from "../dungeon-solo.js";
 import { boostClan, joinProt } from "../group-fight.js";
 import { redrawPetarena } from "../pets.js";
-import { handlePvpFight, initPvpUI } from "../pvp.js";
+import { skipPvpFight, initPvpUI } from "../pvp.js";
 import { handleModifyManyTattoos } from "../tattoo.js";
 import { formatNumber, getElementsOnThePage, strToHtml } from "../utils.js";
 import {
@@ -35,7 +35,11 @@ import {
   LEGACY_initGroupFightLogs,
 } from "./_legacy.js";
 import { createButton, createNumberAction } from "./button.js";
-import { enhanceGroupFightLogs, sortGroupFightPlayers } from "./logs.js";
+import {
+  enhanceGroupFightLogs,
+  redrawLogsPagination,
+  sortGroupFightPlayers,
+} from "./logs.js";
 import { phoneSpeedUp } from "./phone.js";
 import { createPopover } from "./popover.js";
 
@@ -700,7 +704,7 @@ function redrawRats() {
         await attackRat();
         $(document).one("ajaxStop", async function () {
           if (isGroupFight()) {
-            await handlePvpFight();
+            await skipPvpFight();
           }
         });
 
@@ -753,6 +757,7 @@ function handleGroupFightUI() {
   // redraw group fight logs
   enhanceGroupFightLogs();
   sortGroupFightPlayers();
+  redrawLogsPagination();
 }
 
 function isGroupFight() {
@@ -948,7 +953,7 @@ export function handleUI() {
     // group fight
 
     console.log("Group fight");
-    LEGACY_initGroupFightLogs();
+
     handleEndOfGroupFight();
     handleGroupFightUI();
   } else if (url === "/player/") {

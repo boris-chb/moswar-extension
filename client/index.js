@@ -159,7 +159,7 @@ export * from "./cars.js";
 export * from "./dopings.js";
 export * from "./group-fight.js";
 export { sendMessage } from "./phone.js";
-export { handlePvpFight } from "./pvp.js";
+export { skipPvpFight as handlePvpFight } from "./pvp.js";
 export * from "./ui/index.js";
 export * from "./utils.js";
 export { zodiacMode } from "./zodiac.js";

@@ -1,4 +1,4 @@
-import { handlePvpFight } from "./pvp";
+import { skipPvpFight } from "./pvp";
 
 /* global showAlert AngryAjax $ */
 var _dung = {}; //подвал одиночный
@@ -231,7 +231,7 @@ _dung.xod = function () {
         return;
       }
       if (data && data.return_url && data.return_url.search("/fight/") != -1) {
-        $(document).one("ajaxStop", handlePvpFight);
+        $(document).one("ajaxStop", skipPvpFight);
         console.log("Групповой бой ");
         setTimeout(_dung.xod, 5000);
         return;
