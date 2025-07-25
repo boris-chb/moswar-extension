@@ -743,8 +743,8 @@ function handleGroupFightUI() {
     miniChat.css({
       left: "3px",
       top: "570px",
-      width: "208.778px",
-      height: "577.778px",
+      width: "200px",
+      height: "470px",
       position: "absolute",
     });
 

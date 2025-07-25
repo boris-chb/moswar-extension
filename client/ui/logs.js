@@ -148,12 +148,19 @@ function sortPlayersList(parent) {
   const sortByRage = (arr) =>
     arr.sort((a, b) => getRageWidth(b) - getRageWidth(a));
   const sortByMaxHP = (arr) => arr.sort((a, b) => parseHP(b) - parseHP(a));
+  function sortByAliveFirst(listItems) {
+    listItems.sort((a, b) => {
+      const aIsAlive = $(a).hasClass("alive") ? 0 : 1;
+      const bIsAlive = $(b).hasClass("alive") ? 0 : 1;
+      return aIsAlive - bIsAlive;
+    });
+  }
 
-  sortByRage(alivePlayers);
-  sortByRage(deadPlayers);
-  sortByRage(clones);
-  sortByRage(specialNpcs);
-  sortByMaxHP(secondaryNpcs);
+  sortByAliveFirst(sortByRage(alivePlayers));
+  sortByAliveFirst(sortByRage(deadPlayers));
+  sortByAliveFirst(sortByRage(clones));
+  sortByAliveFirst(sortByRage(specialNpcs));
+  sortByAliveFirst(sortByMaxHP(secondaryNpcs));
 
   // containers
   const playerContainer = $('<div class="sorted-players-container">');

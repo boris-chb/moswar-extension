@@ -357,20 +357,21 @@ export function sortGarage() {
 
     const carsCountDiv = $(`
       <div id="cars-count">
-        <span>• Отправлено вв: <b>${cooldownBoatsCount} /  ${planesAndBoats.length}</b> ✈️ 🚢</span>
-        <span>• Отправлено тачек: <b>${cooldownCarsCount} / ${allCars.length}</b> 🚙</span>
+        <span>Отправлено вв: <b>${cooldownBoatsCount} /  ${planesAndBoats.length}</b> ✈️ 🚢</span>
+        <span>•</span>
+        <span>Отправлено тачек: <b>${cooldownCarsCount} / ${allCars.length}</b> 🚙</span>
       </div>
     `).css({
       display: "flex",
       flexDirection: "row",
       justifyContent: "center",
-      alignItems: "start",
-      gap: "8px",
+      alignItems: "center",
+      gap: "16px",
       fontSize: "18px",
       lineHeight: "16px",
       textTransform: "uppercase",
       fontFamily: "bloccregular",
-      padding: "8px 0px",
+      padding: "12px 0px",
     });
 
     const buttonsGrid = $("<div id='send-cars-buttons'></div>")
