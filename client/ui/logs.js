@@ -278,6 +278,22 @@ export function redrawLogsPagination() {
 
   fightGroupForm.prepend(logTurnsNavbar);
   $(".log-panel").prepend($(".fight-slots-actions"));
+
+  var fightAction = $("#fightAction");
+
+  fightAction.append(
+    '<i id="fight-action-reload" class="icon reload-icon" title="Изменить ход"></i>'
+  );
+
+  $("#fight-action-reload").on("click", function () {
+    fightAction
+      .show()
+      .find("button")
+      .show()
+      .removeClass("disabled")
+      .prop("disabled", false);
+    fightAction.find(".waiting").hide();
+  });
 }
 
 export function LEGAGY_enhanceLogs() {

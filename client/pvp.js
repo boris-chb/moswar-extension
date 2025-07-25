@@ -281,5 +281,42 @@ export function initPvpUI() {
   // move геометки banner to the bottom
   $(".worldtour-banner").appendTo($(".worldtour-banner").parent());
 
+  if ($(".auto-pvp").length > 0) {
+    console.log("[PVP] Panel already initialized.");
+    return;
+  }
+
+  // DO NOT REMOVE
+  let skipFightBtn = $(
+    `<div class="button auto-pvp" id="skip-fight-btn" class="auto-pvp"><a class="f" ><i class="rl"></i><i class="bl"></i><i class="brc"></i><div class="c"><span>⏩ Скип боя</span></div></a></div>`
+  );
+
+  let infiniteFightBtn = $(
+    `<div class="disabled button auto-pvp" id="skip-fight-btn" class="auto-pvp"><a class="f"><i class="rl"></i><i class="bl"></i><i class="brc"></i><div class="c"><span>∞ Бесконечный бой</span></div></a></div>`
+  );
+
+  async function handleSkipFight() {
+    $(document).one("ajaxStop", () => {
+      AngryAjax.reload();
+      setTimeout(() => skipPvpFight(), 500);
+    });
+    await pvpStartFight();
+  }
+
+  function handleInfiniteFight() {
+    showAlert("Ошибка", "Еще не готово");
+    return;
+    // $(document).one("ajaxStop", () => {});
+    // Worldtour2.startFight();
+  }
+
+  skipFightBtn.on("click", handleSkipFight);
+
+  infiniteFightBtn.on("click", handleInfiniteFight);
+
+  // $("#travel-pvp-button").after(findStrongBtn);
+  $("#travel-classic-button").after(infiniteFightBtn);
+  $("#travel-pvp-button").after(skipFightBtn);
+  // $("#travel-pvp-button").after(speedrunBtn);
   // $("#travel-classic-button").after(farmStarsBtn);
 }

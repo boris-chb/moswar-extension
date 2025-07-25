@@ -988,7 +988,6 @@ export function LEGACY_initGroupFightLogs() {
         }
 
         var fightGroupForm = $("#fightGroupForm");
-        var fightAction = $("#fightAction");
 
         var logTurnsNavbar = fightGroupForm.find(".pagescroll").clone();
 
@@ -1012,6 +1011,8 @@ export function LEGACY_initGroupFightLogs() {
         if ($(".superhit-wrapper").length !== 0) {
           $(".superhit-wrapper").css("zoom", "0.8");
         }
+
+        var fightAction = $("#fightAction");
 
         fightAction.append(
           '<i id="fight-action-reload" class="icon reload-icon" title="Изменить ход"></i>'
