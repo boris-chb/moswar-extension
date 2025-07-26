@@ -143,6 +143,7 @@ async function customRoll(top = false) {
   simple_tooltip(newOpponentStats.children().first());
 
   replaceRollBtnHandlers();
+  redrawPvpContent();
 }
 
 function renderPvpTotals() {
@@ -197,6 +198,15 @@ function redrawPvpContent() {
     $(el).remove()
   );
 
+  const maxOfferSpan = $("<span>")
+    .addClass("dpoints")
+    .text(maxOffer)
+    .append("<i></i>");
+
+  if (maxOffer === maxTotal) {
+    maxOfferSpan.css("color", "#3cff00");
+  }
+
   const container = $("<div>")
     .addClass("worldtour-stats__p")
     .css({
@@ -210,7 +220,7 @@ function redrawPvpContent() {
     .append("Сейчас:")
     .append($("<span>").addClass("dpoints").text(currentBest).append("<i></i>"))
     .append("Можете получить:")
-    .append($("<span>").addClass("dpoints").text(maxOffer).append("<i></i>"))
+    .append(maxOfferSpan)
     .append(`Максимум (${agiotage}):`)
     .append($("<span>").addClass("dpoints").text(maxTotal).append("<i></i>"));
 

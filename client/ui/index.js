@@ -261,7 +261,7 @@ export async function renderPanel() {
       borderStyle: "solid",
       borderColor: "rgb(209, 148, 92)",
       borderRadius: "12px",
-      zIndex: "999999",
+      zIndex: "99",
     });
 
     $(".body-bg").append($assistantContainer);
@@ -744,7 +744,7 @@ function handleGroupFightUI() {
       left: "3px",
       top: "570px",
       width: "200px",
-      height: "470px",
+      height: "330px",
       position: "absolute",
     });
 
